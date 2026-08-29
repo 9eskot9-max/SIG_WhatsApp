@@ -136,9 +136,9 @@ def send_document(doctype: str, name: str, to: str | None = None, caption: str |
     """Queue/send a submitted Sales Invoice or Purchase Order PDF."""
     if doctype not in {"Sales Invoice", "Purchase Order"}:
         frappe.throw(_("Only Sales Invoice and Purchase Order documents are supported."))
-    if not frappe.has_permission(doctype, "read", name=name):
-        frappe.throw(_("You do not have permission to read this document."), frappe.PermissionError)
     doc = frappe.get_doc(doctype, name)
+    if not frappe.has_permission(doctype, "read", doc):
+        frappe.throw(_("You do not have permission to read this document."), frappe.PermissionError)
     if doc.docstatus != 1:
         frappe.throw(_("Only submitted documents can be sent."))
 

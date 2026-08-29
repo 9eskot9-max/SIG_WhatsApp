@@ -2,7 +2,8 @@
  "doctype":"DocType",
  "module":"SIG WhatsApp",
  "name":"Maytapi Message Log",
- "permissions":[{"role":"System Manager","read":1,"report":1}],
+ "autoname":"hash",
+ "permissions":[{"role":"System Manager","read":1,"report":1,"export":1}],
  "field_order":["reference_doctype","reference_name","resolved_recipient","sent_recipient","status","message_id","error"],
  "fields":[
   {"fieldname":"reference_doctype","fieldtype":"Link","options":"DocType","label":"Reference DocType","read_only":1},

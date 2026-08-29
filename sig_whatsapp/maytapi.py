@@ -117,7 +117,12 @@ def _post(settings, payload: dict) -> dict:
     request = Request(
         url,
         data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        headers={"Content-Type": "application/json", "x-maytapi-key": settings.get_password("api_token")},
+        headers={
+            "Content-Type": "application/json",
+            "x-maytapi-key": settings.get_password("api_token"),
+            # Maytapi sits behind Cloudflare; requests without User-Agent get HTTP 403 (1010).
+            "User-Agent": "SIG-WhatsApp/1.0 (ERPNext; +https://github.com/9eskot9-max/SIG_WhatsApp)",
+        },
         method="POST",
     )
     try:
@@ -172,10 +177,19 @@ def send_document(doctype: str, name: str, to: str | None = None, caption: str |
             response = json.loads(result.get("body") or "{}")
         except json.JSONDecodeError:
             response = {}
-        message_id = str(response.get("message_id") or response.get("id") or response.get("data", {}).get("id", ""))
+        data = response.get("data") if isinstance(response.get("data"), dict) else {}
+        message_id = str(
+            response.get("message_id")
+            or response.get("id")
+            or data.get("msgId")
+            or data.get("id")
+            or ""
+        )
         _audit(doctype, name, resolved, sent_to, "QUEUED", message_id)
         return {"status": "QUEUED", "message_id": message_id, "sent_to": _mask(sent_to), "testing": bool(settings.test_mode)}
     except Exception as exc:
         safe_error = str(exc)[:500]
         _audit(doctype, name, resolved, sent_to, "FAILED", error=safe_error)
+        # Persist the audit row even though we re-raise (Frappe rolls back on exception).
+        frappe.db.commit()
         raise

@@ -1,7 +1,7 @@
 {
  "doctype": "DocType",
  "issingle": 1,
- "module": "Saudi Arabia Electronic Invoicing",
+ "module": "SIG WhatsApp",
  "name": "Maytapi Settings",
  "permissions": [{"role": "System Manager", "read": 1, "write": 1}],
  "field_order": ["enabled", "product_id", "phone_id", "api_token", "endpoint", "timeout_seconds", "test_mode", "test_phone_number", "sales_invoice_print_format", "purchase_order_print_format"],

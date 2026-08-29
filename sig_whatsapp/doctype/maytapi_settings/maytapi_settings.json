@@ -1,0 +1,20 @@
+{
+ "doctype": "DocType",
+ "issingle": 1,
+ "module": "Saudi Arabia Electronic Invoicing",
+ "name": "Maytapi Settings",
+ "permissions": [{"role": "System Manager", "read": 1, "write": 1}],
+ "field_order": ["enabled", "product_id", "phone_id", "api_token", "endpoint", "timeout_seconds", "test_mode", "test_phone_number", "sales_invoice_print_format", "purchase_order_print_format"],
+ "fields": [
+  {"fieldname":"enabled","fieldtype":"Check","label":"Enabled","default":"0"},
+  {"fieldname":"product_id","fieldtype":"Data","label":"Maytapi Product ID"},
+  {"fieldname":"phone_id","fieldtype":"Data","label":"Maytapi Phone ID"},
+  {"fieldname":"api_token","fieldtype":"Password","label":"Maytapi API Token"},
+  {"fieldname":"endpoint","fieldtype":"Data","label":"API Base Endpoint","default":"https://api.maytapi.com/api"},
+  {"fieldname":"timeout_seconds","fieldtype":"Int","label":"Timeout (seconds)","default":"30"},
+  {"fieldname":"test_mode","fieldtype":"Check","label":"Testing Mode","default":"1"},
+  {"fieldname":"test_phone_number","fieldtype":"Data","label":"Test Phone Number"},
+  {"fieldname":"sales_invoice_print_format","fieldtype":"Link","options":"Print Format","label":"Sales Invoice Print Format"},
+  {"fieldname":"purchase_order_print_format","fieldtype":"Link","options":"Print Format","label":"Purchase Order Print Format"}
+ ]
+}

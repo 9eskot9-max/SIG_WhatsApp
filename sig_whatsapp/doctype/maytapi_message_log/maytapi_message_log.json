@@ -1,0 +1,16 @@
+{
+ "doctype":"DocType",
+ "module":"Saudi Arabia Electronic Invoicing",
+ "name":"Maytapi Message Log",
+ "permissions":[{"role":"System Manager","read":1,"report":1}],
+ "field_order":["reference_doctype","reference_name","resolved_recipient","sent_recipient","status","message_id","error"],
+ "fields":[
+  {"fieldname":"reference_doctype","fieldtype":"Link","options":"DocType","label":"Reference DocType","read_only":1},
+  {"fieldname":"reference_name","fieldtype":"Dynamic Link","options":"reference_doctype","label":"Reference Name","read_only":1},
+  {"fieldname":"resolved_recipient","fieldtype":"Data","label":"Resolved Recipient","read_only":1},
+  {"fieldname":"sent_recipient","fieldtype":"Data","label":"Sent Recipient","read_only":1},
+  {"fieldname":"status","fieldtype":"Select","options":"QUEUED\nFAILED\nSKIPPED","label":"Status","read_only":1},
+  {"fieldname":"message_id","fieldtype":"Data","label":"Maytapi Message ID","read_only":1},
+  {"fieldname":"error","fieldtype":"Small Text","label":"Error","read_only":1}
+ ]
+}

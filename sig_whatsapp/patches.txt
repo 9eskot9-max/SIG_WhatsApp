@@ -1,0 +1,2 @@
+# No schema patches are required for the initial release.
+# This file marks the package as a complete Frappe application for deployment.

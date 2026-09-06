@@ -12,17 +12,17 @@
 	--sig-gradient: linear-gradient(120deg, #0289f7 0%, #2ba1f2 55%, #7c5cf0 130%);
 }
 
-/* Primary buttons carry the brand gradient; all other buttons stay native. */
+/* Primary buttons: solid brand blue with a visibly darker border — gradients
+   on frequently-used buttons read as distracting. */
 .btn-primary {
-	background-image: var(--sig-gradient);
-	border-color: #0380ea;
+	background-color: var(--sig-blue);
+	border-color: var(--sig-blue-deep);
 }
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-	background-image: var(--sig-gradient);
-	filter: brightness(0.94);
-	border-color: #0377d4;
+	background-color: #007be0;
+	border-color: #035a9e;
 }
 
 /* Sidebar: white dominance with a faint blue wash at the top. */

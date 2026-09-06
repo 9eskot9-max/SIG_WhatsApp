@@ -45,6 +45,12 @@
 	border-top: 2px solid rgba(2, 137, 247, 0.35);
 }
 
+/* Login page logo: frappe's app_logo_url hook default wins by app order, so
+   swap the image here instead. Same logo as the MeshCentral app. */
+img.app-logo {
+	content: url("/assets/sig_whatsapp/images/sig-logo.png");
+}
+
 /* Login page: white card over a light blue wash. */
 .login-page {
 	background: linear-gradient(160deg, #eaf4fd 0%, #ffffff 55%, #f4f1fe 100%) !important;

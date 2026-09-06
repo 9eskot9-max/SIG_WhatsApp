@@ -13,14 +13,15 @@
 }
 
 /* Primary buttons: solid brand blue with a visibly darker border — gradients
-   on frequently-used buttons read as distracting. */
-.btn-primary {
+   on frequently-used buttons read as distracting. html scope outranks
+   frappe's own `.btn.btn-primary` rule without resorting to !important. */
+html .btn.btn-primary {
 	background-color: var(--sig-blue);
 	border-color: var(--sig-blue-deep);
 }
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:not(:disabled):not(.disabled):active {
+html .btn.btn-primary:hover,
+html .btn.btn-primary:focus,
+html .btn.btn-primary:not(:disabled):not(.disabled):active {
 	background-color: #007be0;
 	border-color: #035a9e;
 }

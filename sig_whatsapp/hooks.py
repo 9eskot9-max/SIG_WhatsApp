@@ -9,3 +9,8 @@ doctype_js = {
     "Sales Invoice": "public/js/sales_invoice.js",
     "Purchase Order": "public/js/purchase_order.js",
 }
+
+# SIG brand look (MASTER-ERP-INTEGRATION.md, Workspace and interface design):
+# MeshCentral app logo on the login page, brand CSS on desk + website.
+app_logo_url = "/assets/sig_whatsapp/images/sig-logo.png"
+app_include_css = "/assets/sig_whatsapp/css/sig_theme.css"

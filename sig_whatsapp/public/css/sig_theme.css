@@ -1,0 +1,55 @@
+/*
+ * SIG brand theme — loaded on Desk + website via app_include_css.
+ * Design tokens per ERPNext/Automation DB/MASTER-ERP-INTEGRATION.md:
+ * white dominance, blue gradient as the brand accent, purple only as a
+ * far-end gradient stop. Light theme only; dark mode left untouched.
+ */
+
+:root {
+	--sig-blue: #0289f7;
+	--sig-blue-deep: #0369b8;
+	--sig-purple: #7c5cf0;
+	--sig-gradient: linear-gradient(120deg, #0289f7 0%, #2ba1f2 55%, #7c5cf0 130%);
+}
+
+/* Primary buttons carry the brand gradient; all other buttons stay native. */
+.btn-primary {
+	background-image: var(--sig-gradient);
+	border-color: #0380ea;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+	background-image: var(--sig-gradient);
+	filter: brightness(0.94);
+	border-color: #0377d4;
+}
+
+/* Sidebar: white dominance with a faint blue wash at the top. */
+.standard-sidebar {
+	background: linear-gradient(180deg, #f5f9fd 0%, #ffffff 30%);
+}
+.sidebar-item.active {
+	background-color: rgba(2, 137, 247, 0.09);
+	box-shadow: inset 3px 0 0 0 var(--sig-blue);
+}
+
+/* Navbar: plain white with a hairline blue-to-purple gradient rule. */
+.navbar {
+	border-bottom: 2px solid;
+	border-image: linear-gradient(90deg, rgba(2, 137, 247, 0.55), rgba(124, 92, 240, 0.28), rgba(0, 0, 0, 0)) 1;
+}
+
+/* Number cards keep a white body; only a subtle gradient top edge. */
+.number-card {
+	border-top: 2px solid rgba(2, 137, 247, 0.35);
+}
+
+/* Login page: white card over a light blue wash. */
+.login-page {
+	background: linear-gradient(160deg, #eaf4fd 0%, #ffffff 55%, #f4f1fe 100%) !important;
+}
+.login-page .page-card {
+	border-radius: 12px;
+	box-shadow: 0 6px 24px rgba(2, 105, 184, 0.10);
+}

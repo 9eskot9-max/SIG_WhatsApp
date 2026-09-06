@@ -45,10 +45,20 @@
 	border-top: 2px solid rgba(2, 137, 247, 0.35);
 }
 
-/* Login page logo: frappe's app_logo_url hook default wins by app order, so
-   swap the image here instead. Same logo as the MeshCentral app. */
-img.app-logo {
+/* Desk top-left brand: small App Icon. */
+.navbar-brand .app-logo {
+	content: url("/assets/sig_whatsapp/images/app-icon.png");
+	width: 26px;
+	height: 26px;
+	object-fit: contain;
+}
+
+/* Login page logo: full transparent SIG logo (frappe's app_logo_url hook
+   default cannot be overridden by an app, so swap the image here). */
+[data-path="login"] img.app-logo {
 	content: url("/assets/sig_whatsapp/images/sig-logo.png");
+	width: 220px;
+	height: auto;
 }
 
 /* Login page: white card over a light blue wash. */

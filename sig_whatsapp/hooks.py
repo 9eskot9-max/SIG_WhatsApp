@@ -10,7 +10,7 @@ doctype_js = {
     "Purchase Order": "public/js/purchase_order.js",
 }
 
-# SIG brand look (MASTER-ERP-INTEGRATION.md, Workspace and interface design):
-# MeshCentral app logo on the login page, brand CSS on desk + website.
-app_logo_url = "/assets/sig_whatsapp/images/sig-logo.png"
+# SIG brand look (MASTER-ERP-INTEGRATION.md, Workspace and interface design).
+# Logos are swapped via CSS content: url() inside sig_theme.css — frappe's own
+# app_logo_url default sorts first in the hook chain and cannot be overridden.
 app_include_css = "/assets/sig_whatsapp/css/sig_theme.css"

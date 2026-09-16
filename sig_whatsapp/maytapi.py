@@ -62,7 +62,19 @@ def _mask(value: str) -> str:
     return "***" + value[-4:]
 
 
+STOCK_ENTRY_PURPOSE_FORMAT_FIELD = {
+    "Material Issue": "stock_entry_issue_print_format",
+    "Material Receipt": "stock_entry_receipt_print_format",
+    "Material Transfer": "stock_entry_transfer_print_format",
+}
+
+
 def _resolve_contact_phone(doctype: str, name: str) -> str:
+    if doctype == "Stock Entry":
+        # A warehouse dispatch/return has no customer/supplier counterparty to
+        # resolve a phone from - a caller outside test mode must pass `to`
+        # explicitly (e.g. the operator's own number, or a site contact).
+        frappe.throw(_("Stock Entry has no default recipient - pass `to` explicitly."))
     doc = frappe.get_doc(doctype, name)
     party_field = "customer" if doctype == "Sales Invoice" else "supplier"
     party = doc.get(party_field)
@@ -138,9 +150,9 @@ def _post(settings, payload: dict) -> dict:
 
 @frappe.whitelist()
 def send_document(doctype: str, name: str, to: str | None = None, caption: str | None = None, print_format: str | None = None):
-    """Queue/send a submitted Sales Invoice or Purchase Order PDF."""
-    if doctype not in {"Sales Invoice", "Purchase Order"}:
-        frappe.throw(_("Only Sales Invoice and Purchase Order documents are supported."))
+    """Queue/send a submitted Sales Invoice, Purchase Order or Stock Entry PDF."""
+    if doctype not in {"Sales Invoice", "Purchase Order", "Stock Entry"}:
+        frappe.throw(_("Only Sales Invoice, Purchase Order and Stock Entry documents are supported."))
     doc = frappe.get_doc(doctype, name)
     if not frappe.has_permission(doctype, "read", doc):
         frappe.throw(_("You do not have permission to read this document."), frappe.PermissionError)
@@ -156,7 +168,11 @@ def send_document(doctype: str, name: str, to: str | None = None, caption: str |
         else _resolve_contact_phone(doctype, name)
     )
     sent_to = normalize_recipient(settings.test_phone_number) if settings.test_mode else resolved
-    selected_format = print_format or settings.get("sales_invoice_print_format" if doctype == "Sales Invoice" else "purchase_order_print_format")
+    if doctype == "Stock Entry":
+        format_field = STOCK_ENTRY_PURPOSE_FORMAT_FIELD.get(doc.purpose)
+        selected_format = print_format or (settings.get(format_field) if format_field else None)
+    else:
+        selected_format = print_format or settings.get("sales_invoice_print_format" if doctype == "Sales Invoice" else "purchase_order_print_format")
     html = frappe.get_print(doctype, name, print_format=selected_format or None, doc=doc)
     pdf = get_pdf(html)
     if not pdf or len(pdf) > MAX_PDF_BYTES:

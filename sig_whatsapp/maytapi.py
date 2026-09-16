@@ -148,6 +148,52 @@ def _post(settings, payload: dict) -> dict:
         raise frappe.ValidationError(_("Maytapi connection failed: {0}").format(str(exc.reason)[:300])) from exc
 
 
+def _get(settings, path: str) -> dict:
+    base = (settings.endpoint or DEFAULT_ENDPOINT).rstrip("/")
+    parsed = urlparse(base)
+    if parsed.scheme != "https" or parsed.hostname not in {"api.maytapi.com", "maytapi.com"}:
+        frappe.throw(_("Maytapi endpoint must use HTTPS and a maytapi.com host."))
+    product = _safe_segment(settings.product_id, "product ID")
+    phone = _safe_segment(settings.phone_id, "phone ID")
+    url = f"{base}/{product}/{phone}/{path}"
+    request = Request(
+        url,
+        headers={
+            "x-maytapi-key": settings.get_password("api_token"),
+            # Maytapi sits behind Cloudflare; requests without User-Agent get HTTP 403 (1010).
+            "User-Agent": "SIG-WhatsApp/1.0 (ERPNext; +https://github.com/9eskot9-max/SIG_WhatsApp)",
+        },
+        method="GET",
+    )
+    try:
+        with urlopen(request, timeout=max(5, min(int(settings.timeout_seconds or 30), 120))) as response:
+            body = response.read(512 * 1024).decode("utf-8", errors="replace")
+            return {"status": response.status, "body": body}
+    except HTTPError as exc:
+        body = exc.read(4096).decode("utf-8", errors="replace")
+        raise frappe.ValidationError(_("Maytapi HTTP {0}: {1}").format(exc.code, body[:500])) from exc
+    except URLError as exc:
+        raise frappe.ValidationError(_("Maytapi connection failed: {0}").format(str(exc.reason)[:300])) from exc
+
+
+@frappe.whitelist()
+def list_groups():
+    """List WhatsApp groups the connected Maytapi number belongs to, so a
+    real group ID can be picked for warehouse dispatch notifications instead
+    of being typed in blind - Maytapi's own dashboard doesn't surface group
+    IDs directly, only names, and the raw ID is what sendMessage needs."""
+    settings = _settings()
+    result = _get(settings, "listGroups")
+    if not 200 <= int(result.get("status", 0)) < 300:
+        frappe.throw(_("Maytapi returned HTTP {0}.").format(result.get("status")))
+    try:
+        response = json.loads(result.get("body") or "{}")
+    except json.JSONDecodeError:
+        frappe.throw(_("Maytapi returned an unreadable response."))
+    data = response.get("data") if isinstance(response.get("data"), list) else []
+    return [{"id": g.get("id"), "name": g.get("name")} for g in data if g.get("id")]
+
+
 @frappe.whitelist()
 def send_document(doctype: str, name: str, to: str | None = None, caption: str | None = None, print_format: str | None = None):
     """Queue/send a submitted Sales Invoice, Purchase Order or Stock Entry PDF."""

@@ -1,0 +1,14 @@
+{
+ "doctype":"DocType",
+ "module":"SIG WhatsApp",
+ "name":"Maytapi Dispatch Recipient",
+ "istable":1,
+ "editable_grid":1,
+ "field_order":["warehouse","recipient","label"],
+ "fields":[
+  {"fieldname":"warehouse","fieldtype":"Link","options":"Warehouse","label":"Warehouse","reqd":1,"in_list_view":1},
+  {"fieldname":"recipient","fieldtype":"Data","label":"WhatsApp Group ID or Number","reqd":1,"in_list_view":1,
+   "description":"A Maytapi group ID (e.g. 120363012345678901@g.us, from Maytapi Settings > List WhatsApp Groups) or a plain phone number."},
+  {"fieldname":"label","fieldtype":"Data","label":"Label (for your own reference)","in_list_view":1}
+ ]
+}

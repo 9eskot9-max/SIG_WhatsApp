@@ -4,7 +4,7 @@
  "module": "SIG WhatsApp",
  "name": "Maytapi Settings",
  "permissions": [{"role": "System Manager", "read": 1, "write": 1}],
- "field_order": ["enabled", "product_id", "phone_id", "api_token", "endpoint", "timeout_seconds", "test_mode", "test_phone_number", "sales_invoice_print_format", "purchase_order_print_format", "stock_entry_issue_print_format", "stock_entry_receipt_print_format", "stock_entry_transfer_print_format", "stock_entry_return_print_format", "stock_entry_custody_print_format"],
+ "field_order": ["enabled", "product_id", "phone_id", "api_token", "endpoint", "timeout_seconds", "test_mode", "test_phone_number", "sales_invoice_print_format", "purchase_order_print_format", "stock_entry_issue_print_format", "stock_entry_receipt_print_format", "stock_entry_transfer_print_format", "stock_entry_return_print_format", "stock_entry_custody_print_format", "dispatch_notify_enabled", "dispatch_recipients"],
  "fields": [
   {"fieldname":"enabled","fieldtype":"Check","label":"Enabled","default":"0"},
   {"fieldname":"product_id","fieldtype":"Data","label":"Maytapi Product ID"},
@@ -20,6 +20,9 @@
   {"fieldname":"stock_entry_receipt_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Material Receipt)"},
   {"fieldname":"stock_entry_transfer_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Material Transfer)"},
   {"fieldname":"stock_entry_return_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Return)"},
-  {"fieldname":"stock_entry_custody_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Custody)"}
+  {"fieldname":"stock_entry_custody_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Custody)"},
+  {"fieldname":"dispatch_notify_enabled","fieldtype":"Check","label":"Send warehouse dispatch DNs to WhatsApp by default","default":"0",
+   "description":"When on, every successful ERP dispatch (sig_dispatch_mr) sends its DN print to the WhatsApp group/number configured below for that warehouse. Best-effort: a send failure here never blocks or reverses the dispatch itself."},
+  {"fieldname":"dispatch_recipients","fieldtype":"Table","options":"Maytapi Dispatch Recipient","label":"Dispatch Recipients by Warehouse"}
  ]
 }

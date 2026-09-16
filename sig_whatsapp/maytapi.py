@@ -183,7 +183,7 @@ def list_groups():
     of being typed in blind - Maytapi's own dashboard doesn't surface group
     IDs directly, only names, and the raw ID is what sendMessage needs."""
     settings = _settings()
-    result = _get(settings, "listGroups")
+    result = _get(settings, "getGroups")
     if not 200 <= int(result.get("status", 0)) < 300:
         frappe.throw(_("Maytapi returned HTTP {0}.").format(result.get("status")))
     try:

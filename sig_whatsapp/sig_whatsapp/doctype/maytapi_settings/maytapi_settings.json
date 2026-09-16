@@ -22,7 +22,7 @@
   {"fieldname":"stock_entry_return_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Return)"},
   {"fieldname":"stock_entry_custody_print_format","fieldtype":"Link","options":"Print Format","label":"Stock Entry Print Format (Custody)"},
   {"fieldname":"dispatch_notify_enabled","fieldtype":"Check","label":"Send warehouse dispatch DNs to WhatsApp by default","default":"0",
-   "description":"When on, every successful ERP dispatch (sig_dispatch_mr) sends its DN print to the WhatsApp group/number configured below for that warehouse. Best-effort: a send failure here never blocks or reverses the dispatch itself."},
+   "description":"When on, every successful ERP dispatch (sig_dispatch_mr) sends its DN print to the WhatsApp group matched by the dispatch's project text below (mirrors WH's own MaytapiSend.bas classification). Best-effort: a send failure here never blocks or reverses the dispatch itself."},
   {"fieldname":"dispatch_recipients","fieldtype":"Table","options":"Maytapi Dispatch Recipient","label":"Dispatch Recipients by Warehouse"}
  ]
 }

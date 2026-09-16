@@ -4,9 +4,10 @@
  "name":"Maytapi Dispatch Recipient",
  "istable":1,
  "editable_grid":1,
- "field_order":["warehouse","recipient","label"],
+ "field_order":["project_prefix","recipient","label"],
  "fields":[
-  {"fieldname":"warehouse","fieldtype":"Link","options":"Warehouse","label":"Warehouse","reqd":1,"in_list_view":1},
+  {"fieldname":"project_prefix","fieldtype":"Data","label":"Project Text Prefix (lowercase)","reqd":1,"in_list_view":1,
+   "description":"Matched against the dispatch's line project text (case-insensitive startswith) - mirrors WH's own MaytapiSend.bas ResolveGroupIdForProject classification (e.g. 'capex', '5g', 'incident')."},
   {"fieldname":"recipient","fieldtype":"Data","label":"WhatsApp Group ID or Number","reqd":1,"in_list_view":1,
    "description":"A Maytapi group ID (e.g. 120363012345678901@g.us, from Maytapi Settings > List WhatsApp Groups) or a plain phone number."},
   {"fieldname":"label","fieldtype":"Data","label":"Label (for your own reference)","in_list_view":1}

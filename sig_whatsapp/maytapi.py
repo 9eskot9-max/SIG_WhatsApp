@@ -69,6 +69,23 @@ STOCK_ENTRY_PURPOSE_FORMAT_FIELD = {
 }
 
 
+def _pdf_filename(doctype: str, doc, name: str) -> str:
+    """Use the human delivery voucher on Stock Entry PDFs when available.
+
+    ERPNext's internal Stock Entry name (for example ``STE-2026-0900``) is
+    useful for navigation but is not the warehouse DN.  Dispatches created by
+    SIG Warehouse carry the immutable DN voucher in ``custom_source_id``;
+    legacy mirrored entries may carry it inside ``SIG-DN-...``.  Preserve any
+    explicit voucher suffix supplied by the source, but do not invent one here.
+    """
+    if doctype == "Stock Entry":
+        source = str(doc.get("custom_source_id") or "")
+        match = re.search(r"(DN\d{2}-\d+(?:-\d+)?)", source, re.IGNORECASE)
+        if match:
+            return f"{match.group(1).upper()}.pdf"
+    return f"{name}.pdf"
+
+
 def _resolve_contact_phone(doctype: str, name: str) -> str:
     if doctype == "Stock Entry":
         # A warehouse dispatch/return has no customer/supplier counterparty to
@@ -223,7 +240,7 @@ def send_document(doctype: str, name: str, to: str | None = None, caption: str |
     pdf = get_pdf(html)
     if not pdf or len(pdf) > MAX_PDF_BYTES:
         frappe.throw(_("Generated PDF is empty or exceeds 10 MB."))
-    filename = f"{name}.pdf"
+    filename = _pdf_filename(doctype, doc, name)
     payload = {
         "to_number": sent_to,
         "type": "media",
@@ -255,3 +272,4 @@ def send_document(doctype: str, name: str, to: str | None = None, caption: str |
         # Persist the audit row even though we re-raise (Frappe rolls back on exception).
         frappe.db.commit()
         raise
+

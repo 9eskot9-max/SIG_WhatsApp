@@ -86,6 +86,17 @@ def _pdf_filename(doctype: str, doc, name: str) -> str:
     return f"{name}.pdf"
 
 
+def _stock_entry_caption(doc, name: str) -> str:
+    """Return a human dispatch label without exposing ERP's internal STE name."""
+    voucher = str(doc.get("custom_source_id") or name).strip()
+    recipient = str(doc.get("custom_dispatched_to_other") or "").strip()
+    if not recipient and doc.get("custom_dispatched_to"):
+        recipient = frappe.db.get_value(
+            "Employee", doc.custom_dispatched_to, "employee_name"
+        ) or str(doc.custom_dispatched_to)
+    return f"{voucher} to: {recipient or '—'}"
+
+
 def _resolve_contact_phone(doctype: str, name: str) -> str:
     if doctype == "Stock Entry":
         # A warehouse dispatch/return has no customer/supplier counterparty to
@@ -246,7 +257,11 @@ def send_document(doctype: str, name: str, to: str | None = None, caption: str |
         "type": "media",
         "message": "data:application/pdf;base64," + base64.b64encode(pdf).decode("ascii"),
         "filename": filename,
-        "text": caption or f"{doctype}: {name}",
+        "text": caption or (
+            _stock_entry_caption(doc, name)
+            if doctype == "Stock Entry" and doc.purpose == "Material Issue"
+            else f"{doctype}: {name}"
+        ),
     }
     try:
         result = _post(settings, payload)
